@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="stylesheets/style.css" >
         <script src="javascripts/page.js" defer></script>
     </head>
-    <body onload="loadPosts()">
+    <body>
         <header>
             <!--<button>Signup</button>-->
             <img class="logo" src="images/logo.png" alt="WDC Overflow" />
@@ -18,16 +18,19 @@
         </header>
         <main id="main">
 
-            <label for="username">Username</label><input type="text" id="username" />
-            <label for="password">Password</label><input type="password" id="password" />
-            <button onclick="login()">Login</button>
-            <button onclick="logout()">Logout</button>
+            <form onsubmit="event.preventDefault(); login();">
+                <label for="username">Username</label><input type="text" id="username" />
+                <label for="password">Password</label><input type="password" id="password" />
+                <button type="submit">Login</button>
+                <button type="button" onclick="logout()">Logout</button>
+            </form>
+
 
             <div class="search">
                 <button class="right" onclick="showAsk()">Ask Question</button>
-                <h2>Search Results
+                <h2>Search Results</h2>
                 <button class="right" onclick="searchPosts()">Search</button>
-                <input type="text" name="search" id="post-search" placeholder="Enter your search terms"  />
+                <input type="text" name="search" id="post-search" placeholder="Enter your search terms" />
             </div>
 
             <div id="post-list">
@@ -54,9 +57,12 @@
         </main>
         <section id="ask">
             <h2>Ask a Question</h2>
+            <label for="post-title">Title</label>
             <input id="post-title" type="text" placeholder="Title" /><br />
-            <textarea id="post-content" placeholder="Details..." ></textarea><br />
-            <input id="post-tags" type="text"  placeholder="Tags" /><br />
+            <label for="post-content">Details</label>
+            <textarea id="post-content" placeholder="Details..."></textarea><br />
+            <label for="post-tags">Tags</label>
+            <input id="post-tags" type="text" placeholder="Tags" /><br />
             <button onclick="createPost()">Create Post</button>
             <button  onclick="showMain()">Cancel</button>
         </section>

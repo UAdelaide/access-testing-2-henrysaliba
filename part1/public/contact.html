@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Seller</title>
+  <link rel="stylesheet" href="public/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>Contact Seller</h1>
+
+    <label for="listing">Choose a book:</label>
+    <select v-model="selectedListingId">
+      <option disabled value="">-- Select a book --</option>
+      <option v-for="listing in listings" :value="listing.listing_id">
+        {{ listing.title }} (Seller: {{ listing.seller }})
+      </option>
+    </select>
+
+    <br><br>
+    <textarea v-model="messageText" placeholder="Write your message here..." rows="5" cols="40"></textarea>
+    <br><br>
+    <button @click="sendMessage">Send Message</button>
+
+    <p v-if="successMessage" style="color: green">{{ successMessage }}</p>
+    <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
+  </div>
+
+  <script src="contact.js"></script>
+</body>
+</html>

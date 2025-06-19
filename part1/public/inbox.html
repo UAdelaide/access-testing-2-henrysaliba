@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Seller Inbox</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="inbox">
+    <h1>Your Messages</h1>
+    <ul>
+      <li v-for="msg in messages">
+        <strong>{{ msg.title }}</strong><br>
+        From: {{ msg.sender }}<br>
+        "{{ msg.message_text }}"<br>
+        <em>{{ msg.sent_at }}</em>
+        <hr>
+      </li>
+    </ul>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#inbox',
+      data: {
+        messages: []
+      },
+      mounted() {
+        fetch('/api/inbox')
+          .then(res => res.json())
+          .then(data => {
+            this.messages = data;
+          });
+      }
+    });
+  </script>
+</body>
+</html>

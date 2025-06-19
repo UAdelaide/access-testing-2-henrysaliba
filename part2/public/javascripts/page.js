@@ -1,5 +1,5 @@
-var posts = [];
-var search = null;
+let posts = [];
+let search = null;
 
 /*
  * Hides the main part of the page to show the Ask a Question section
@@ -45,7 +45,7 @@ function createPost(){
 
     // Define function to run on response
     xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
+        if (this.readyState === 4 && this.status == 200) {
             // Update the page on success
             loadPosts();
             showMain();
@@ -95,31 +95,66 @@ function updatePosts() {
             }
         }
 
-        // Generate a set of spans for each of the tags
-        let tagSpans = '';
-        for(let tag of post.tags){
-            tagSpans = tagSpans + `<span class="tag">${tag}</span>`;
-        }
-
-        // Generate the post/question element and populate its inner HTML
-        let postDiv = document.createElement("DIV");
+        // Generate the post/question element and populate it safely
+        const postDiv = document.createElement("div");
         postDiv.classList.add("post");
 
-        postDiv.innerHTML = `
-            <div class="votes">
-                <button onclick="upvote(${i})">+</button>
-                <p><span class="count">${post.upvotes}</span><br />votes</p>
-                <button onclick="downvote(${i})">-</button>
-            </div>
-            <div class="content">
-                <h3><a href="#">${post.title}</a></h3>
-                <i>By ${post.author}</i>
-                <p>${post.content}</p>
-                ${tagSpans}<span class="date">${new Date(post.timestamp).toLocaleString()}</span>
-            </div>
-        `;
+        // Create the votes section
+        const votesDiv = document.createElement("div");
+        votesDiv.classList.add("votes");
 
-        // Append the question/post to the page
+        const upBtn = document.createElement("button");
+        upBtn.textContent = "+";
+        upBtn.onclick = () => upvote(i);
+
+        const voteText = document.createElement("p");
+        voteText.innerHTML = `<span class="count">${post.upvotes}</span><br />votes`;
+
+        const downBtn = document.createElement("button");
+        downBtn.textContent = "-";
+        downBtn.onclick = () => downvote(i);
+
+        votesDiv.appendChild(upBtn);
+        votesDiv.appendChild(voteText);
+        votesDiv.appendChild(downBtn);
+
+        // Create the content section
+        const contentDiv = document.createElement("div");
+        contentDiv.classList.add("content");
+
+        const title = document.createElement("h3");
+        const titleLink = document.createElement("a");
+        titleLink.href = "#";
+        titleLink.textContent = post.title;
+        title.appendChild(titleLink);
+
+        const author = document.createElement("i");
+        author.textContent = `By ${post.author}`;
+
+        const body = document.createElement("p");
+        body.textContent = post.content;
+
+        const date = document.createElement("span");
+        date.classList.add("date");
+        date.textContent = new Date(post.timestamp).toLocaleString();
+
+        // Append tags
+        for (const tag of post.tags) {
+            const tagSpan = document.createElement("span");
+            tagSpan.classList.add("tag");
+            tagSpan.textContent = tag;
+            contentDiv.appendChild(tagSpan);
+        }
+
+        contentDiv.appendChild(title);
+        contentDiv.appendChild(author);
+        contentDiv.appendChild(body);
+        contentDiv.appendChild(date);
+
+        postDiv.appendChild(votesDiv);
+        postDiv.appendChild(contentDiv);
+
+        // Append to the page
         document.getElementById("post-list").appendChild(postDiv);
 
     }
@@ -140,7 +175,7 @@ function loadPosts() {
 
     // Define function to run on response
     xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
+        if (this.readyState === 4 && this.status == 200) {
             // Parse the JSON and update the posts array
             posts = JSON.parse(this.responseText);
             // Call the updatePosts function to update the page
@@ -186,9 +221,9 @@ function login(){
 
     // Define function to run on response
     xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
+        if (this.readyState === 4 && this.status == 200) {
             alert("Welcome "+this.responseText);
-        } else if (this.readyState == 4 && this.status >= 400) {
+        } else if (this.readyState === 4 && this.status >= 400) {
             alert("Login failed");
         }
     };
@@ -211,3 +246,5 @@ function logout(){
     xmlhttp.send();
 
 }
+
+window.addEventListener('DOMContentLoaded', loadPosts);
